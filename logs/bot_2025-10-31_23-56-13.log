@@ -1,0 +1,7 @@
+Bot starting up...
+Adding commands...
+Logged in as: Hitam Client#8598
+Press Ctrl+C to exit
+[2025-10-31 23:56:23] COMMAND_RECEIVED: doujin | USER: necrr (715165927762559038) | CODE: 235223 | GUILD: 1041520458039828562
+[2025-10-31 23:56:24] API_REQUEST: code=235223 | status=200 | response_time=729.1596ms
+[2025-10-31 23:56:24] DOUJIN_DATA: code=235223 | title=Gakkou de Seishun! 9 | pages=25 | favorites=861

@@ -1,0 +1,7 @@
+Bot starting up...
+Adding commands...
+Logged in as: Hitam Client#8598
+Press Ctrl+C to exit
+[2025-10-31 23:54:25] COMMAND_RECEIVED: doujin | USER: necrr (715165927762559038) | CODE: 234553 | GUILD: 1041520458039828562
+[2025-10-31 23:54:26] API_REQUEST: code=234553 | status=200 | response_time=977.1465ms
+[2025-10-31 23:54:26] DOUJIN_DATA: code=234553 | title=Shinkai Seikan | pages=18 | favorites=1317

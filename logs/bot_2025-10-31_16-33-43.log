@@ -1,0 +1,8 @@
+Bot starting up...
+Adding commands...
+Logged in as: Hitam Client#8598
+Press Ctrl+C to exit
+[2025-10-31 16:34:05] COMMAND_RECEIVED: doujin | USER: necrr (715165927762559038) | CODE: 287474 | GUILD: 1041520458039828562
+[2025-10-31 16:34:06] API_REQUEST: code=287474 | status=200 | response_time=675.7386ms
+[2025-10-31 16:34:06] DOUJIN_DATA: code=287474 | title=Darling is in sight! | pages=22 | favorites=507
+[2025-10-31 16:34:06] COMMAND: doujin | USER: necrr (715165927762559038) | CODE: 287474 | STATUS: SUCCESS

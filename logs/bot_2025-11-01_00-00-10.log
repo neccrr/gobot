@@ -1,0 +1,7 @@
+Bot starting up...
+Adding commands...
+Logged in as: Hitam Client#8598
+Press Ctrl+C to exit
+[2025-11-01 00:00:18] COMMAND_RECEIVED: doujin | USER: necrr (715165927762559038) | CODE: 232353 | GUILD: 1041520458039828562
+[2025-11-01 00:00:19] API_REQUEST: code=232353 | status=200 | response_time=583.6303ms
+[2025-11-01 00:00:19] DOUJIN_DATA: code=232353 | title=Itoshi no Love Bear - I Love Bear | pages=166 | favorites=125

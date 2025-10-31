@@ -1,0 +1,13 @@
+Bot starting up...
+Adding commands...
+Logged in as: Hitam Client#8598
+Press Ctrl+C to exit
+[2025-10-31 15:51:20] COMMAND_RECEIVED: doujin | USER: necrr (715165927762559038) | CODE: 222222 | GUILD: 1041520458039828562
+[2025-10-31 15:51:20] API_REQUEST: code=222222 | status=200 | response_time=680.8272ms
+[2025-10-31 15:51:20] DOUJIN_DATA: code=222222 | title=Hyrule Hanei no Tame no Katsudou! | Taking Steps to Ensure Hyrule's Prosperity! | pages=27 | favorites=5281
+[2025-10-31 15:51:21] COMMAND: doujin | USER: necrr (715165927762559038) | CODE: 222222 | STATUS: SUCCESS
+[2025-10-31 15:59:17] COMMAND_RECEIVED: doujin | USER: necrr (715165927762559038) | CODE: 297974 | GUILD: 1041520458039828562
+[2025-10-31 15:59:18] API_REQUEST: code=297974 | status=200 | response_time=676.0642ms
+[2025-10-31 15:59:18] DOUJIN_DATA: code=297974 | title=Joshi Kōsei Rich Thots | pages=55 | favorites=146598
+[2025-10-31 15:59:18] COMMAND: doujin | USER: necrr (715165927762559038) | CODE: 297974 | STATUS: SUCCESS
+Gracefully shutting down.

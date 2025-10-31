@@ -1,0 +1,10 @@
+Bot starting up...
+Adding commands...
+Logged in as: Hitam Client#8598
+Press Ctrl+C to exit
+[2025-10-31 15:49:13] COMMAND_RECEIVED: doujin | USER: necrr (715165927762559038) | CODE: 297974 | GUILD: 1041520458039828562
+[2025-10-31 15:49:14] API_REQUEST: code=297974 | status=200 | response_time=825.1124ms
+[2025-10-31 15:49:14] DOUJIN_DATA: code=297974 | title=Joshi Kōsei Rich Thots | pages=55 | favorites=146598
+[2025-10-31 15:49:14] COMMAND: doujin | USER: necrr (715165927762559038) | CODE: 297974 | STATUS: SUCCESS
+Removing commands...
+Gracefully shutting down.

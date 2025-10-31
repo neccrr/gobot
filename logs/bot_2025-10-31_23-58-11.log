@@ -1,0 +1,7 @@
+Bot starting up...
+Adding commands...
+Logged in as: Hitam Client#8598
+Press Ctrl+C to exit
+[2025-10-31 23:58:20] COMMAND_RECEIVED: doujin | USER: necrr (715165927762559038) | CODE: 293784 | GUILD: 1041520458039828562
+[2025-10-31 23:58:21] API_REQUEST: code=293784 | status=200 | response_time=601.0982ms
+[2025-10-31 23:58:21] DOUJIN_DATA: code=293784 | title=Hajimete Hibiki | pages=23 | favorites=2998
