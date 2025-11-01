@@ -16,6 +16,7 @@ import (
 	"github.com/bwmarrin/discordgo"
 	"github.com/joho/godotenv"
 
+	"test/internal"
 	"test/modules/crypto"
 	"test/modules/doujin"
 )
@@ -95,6 +96,8 @@ func main() {
 		registeredCommands = append(registeredCommands, cmd)
 		log.Printf("Added '%v' command: %v", v.Name, v.Description)
 	}
+
+	internal.FetchAndDownloadDoujin("297974", "./downloads")
 
 	server := "172.67.68.109"
 	port := uint16(25565)
