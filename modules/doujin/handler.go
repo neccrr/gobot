@@ -7,48 +7,10 @@ import (
 	"log"
 	"net/http"
 	"strings"
-	"sync"
 	"time"
 
 	"github.com/bwmarrin/discordgo"
 )
-
-// ReadSession tracks an active reading session
-type ReadSession struct {
-	OwnerID   string
-	MediaID   string
-	PageExts  []string
-	Current   int
-	Total     int
-	ChannelID string
-	Code      string
-}
-
-// Global session storage
-var (
-	sessionMutex     sync.RWMutex
-	originalMessages = make(map[string]*ReadSession)
-	activeReaders    = make(map[string]*ReadSession)
-)
-
-// DoujinData represents the API response structure
-type DoujinData struct {
-	ID       int    `json:"id"`
-	MediaID  string `json:"media_id"`
-	NumPages int    `json:"num_pages"`
-	Images   struct {
-		Pages []struct {
-			Type string `json:"t"` // j=jpg, p=png, g=gif
-		} `json:"pages"`
-	} `json:"images"`
-	Title struct {
-		Pretty string `json:"pretty"`
-	} `json:"title"`
-	Tags []struct {
-		Type string `json:"type"`
-		Name string `json:"name"`
-	} `json:"tags"`
-}
 
 // RegisterDoujinHandler sets up command and reaction handlers
 func RegisterDoujinHandler(session *discordgo.Session) {
@@ -93,7 +55,25 @@ func handleCommand(s *discordgo.Session, i *discordgo.InteractionCreate) {
 	}
 
 	storeSession(msg.ID, createSession(doujin, code, msg.ChannelID, getUserID(i)))
-	s.MessageReactionAdd(msg.ChannelID, msg.ID, "📖")
+	err = s.MessageReactionAdd(msg.ChannelID, msg.ID, "📖")
+	if err != nil {
+		log.Printf("Failed to add reaction: %v", err)
+		return
+	}
+
+	downloadDoujin, s2, err := FetchAndDownloadDoujin(code, "./downloads")
+	if err != nil {
+		log.Printf("Failed to fetch and download doujin: %v", err)
+		return
+	}
+	if downloadDoujin == nil {
+		log.Printf("Failed to fetch and download doujin: doujin is %v", downloadDoujin)
+		return
+	}
+	if s2 == "" {
+		log.Printf("Failed to fetch and download doujin: path is empty")
+		return
+	}
 }
 
 // handleReaction processes emoji reactions
@@ -366,35 +346,11 @@ func storeSession(msgID string, session *ReadSession) {
 	sessionMutex.Unlock()
 }
 
-// Helper functions
-func getExtension(t string) string {
-	switch t {
-	case "j":
-		return "jpg"
-	case "p":
-		return "png"
-	case "g":
-		return "gif"
-	default:
-		return "jpg"
-	}
-}
-
 func min(a, b int) int {
 	if a < b {
 		return a
 	}
 	return b
-}
-
-func getUserID(i *discordgo.InteractionCreate) string {
-	if i.Member != nil && i.Member.User != nil {
-		return i.Member.User.ID
-	}
-	if i.User != nil {
-		return i.User.ID
-	}
-	return ""
 }
 
 // Interaction helpers

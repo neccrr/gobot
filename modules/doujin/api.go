@@ -1,4 +1,4 @@
-package internal
+package doujin
 
 import (
 	"encoding/json"
@@ -7,14 +7,51 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"test/modules/doujin"
+	"sync"
 	"time"
+
+	"github.com/bwmarrin/discordgo"
 )
 
 // DoujinData is intentionally exported as a type alias to the doujin.DoujinData
 // This provides a single source of truth for the data structure while keeping
 // internal APIs simple. Any changes to doujin.DoujinData will propagate here.
-type DoujinData = doujin.DoujinData
+// DoujinData represents the API response structure
+type DoujinData struct {
+	ID       int    `json:"id"`
+	MediaID  string `json:"media_id"`
+	NumPages int    `json:"num_pages"`
+	Images   struct {
+		Pages []struct {
+			Type string `json:"t"` // j=jpg, p=png, g=gif
+		} `json:"pages"`
+	} `json:"images"`
+	Title struct {
+		Pretty string `json:"pretty"`
+	} `json:"title"`
+	Tags []struct {
+		Type string `json:"type"`
+		Name string `json:"name"`
+	} `json:"tags"`
+}
+
+// ReadSession tracks an active reading session
+type ReadSession struct {
+	OwnerID   string
+	MediaID   string
+	PageExts  []string
+	Current   int
+	Total     int
+	ChannelID string
+	Code      string
+}
+
+// Global session storage
+var (
+	sessionMutex     sync.RWMutex
+	originalMessages = make(map[string]*ReadSession)
+	activeReaders    = make(map[string]*ReadSession)
+)
 
 // getExtension returns the file extension for a NHentai image type token.
 // Mirrors logic used in handler.go: "j" -> jpg, "p" -> png, "g" -> gif.
@@ -136,4 +173,14 @@ func downloadFile(url, localPath string) error {
 		return nil
 	}
 	return lastErr
+}
+
+func getUserID(i *discordgo.InteractionCreate) string {
+	if i.Member != nil && i.Member.User != nil {
+		return i.Member.User.ID
+	}
+	if i.User != nil {
+		return i.User.ID
+	}
+	return ""
 }

@@ -16,9 +16,9 @@ import (
 	"github.com/bwmarrin/discordgo"
 	"github.com/joho/godotenv"
 
-	"test/internal"
 	"test/modules/crypto"
 	"test/modules/doujin"
+	"test/modules/math"
 )
 
 // use godot package to load/read the .env file and
@@ -68,6 +68,7 @@ func main() {
 	// Register command handlers
 	doujin.RegisterDoujinHandler(s)
 	crypto.RegisterCryptoHandler(s)
+	math.RegisterCollatzConjectureHandler(s)
 
 	s.AddHandler(func(s *discordgo.Session, r *discordgo.Ready) {
 		log.Printf("Logged in as: %v#%v", s.State.User.Username, s.State.User.Discriminator)
@@ -96,8 +97,14 @@ func main() {
 		registeredCommands = append(registeredCommands, cmd)
 		log.Printf("Added '%v' command: %v", v.Name, v.Description)
 	}
-
-	internal.FetchAndDownloadDoujin("297974", "./downloads")
+	for _, v := range math.CalculateCommand {
+		cmd, err := s.ApplicationCommandCreate(s.State.User.ID, *GuildID, v)
+		if err != nil {
+			log.Panicf("Cannot create '%v' command: %v", v.Name, err)
+		}
+		registeredCommands = append(registeredCommands, cmd)
+		log.Printf("Added '%v' command: %v", v.Name, v.Description)
+	}
 
 	server := "172.67.68.109"
 	port := uint16(25565)
