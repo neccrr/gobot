@@ -31,6 +31,10 @@ func RegisterCryptoHandler(session *discordgo.Session) {
 
 // TrackHandler handles the /track command
 func TrackHandler(s *discordgo.Session, i *discordgo.InteractionCreate) {
+	if !isCryptoCommand(i) {
+		return
+	}
+
 	// Defer the response first to avoid interaction timeout
 	if err := s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseDeferredChannelMessageWithSource,
@@ -239,6 +243,13 @@ func createPriceEmbed(symbol string, price float64, user *discordgo.User) *disco
 		},
 		Timestamp: time.Now().Format(time.RFC3339),
 	}
+}
+
+func isCryptoCommand(i *discordgo.InteractionCreate) bool {
+	return i != nil &&
+		i.Interaction != nil &&
+		i.Type == discordgo.InteractionApplicationCommand &&
+		i.ApplicationCommandData().Name == "track"
 }
 
 // Helper functions matching your reference pattern
