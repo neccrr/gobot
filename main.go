@@ -5,6 +5,7 @@ import (
 	"log"
 	"os"
 	"os/signal"
+	"runtime"
 	_ "strings"
 	"time"
 
@@ -54,6 +55,16 @@ func init() {
 	if err != nil {
 		log.Fatalf("Invalid bot parameters: %v", err)
 	}
+
+	// go routine for garbage collection
+	go func() {
+		for {
+			time.Sleep(1 * time.Minute)
+			runtime.GC()
+			fmt.Println("Garbage collection executed")
+			fmt.Println("Memory stats:", runtime.MemStats{})
+		}
+	}()
 }
 
 func main() {
