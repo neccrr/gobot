@@ -141,25 +141,37 @@ func handleCollatzConjectureCommand(s *discordgo.Session, i *discordgo.Interacti
 		first2000Response = fullResponse[:1000] + "\n\n[Output truncated. See full output below.]" + summary
 	}
 	// cancel the previous deferred response and send the full response
-	_, err = s.InteractionResponseEdit(i.Interaction, &discordgo.WebhookEdit{
-		Content: &first2000Response,
-		// Full response in file attachment if too long
-		Files: func() []*discordgo.File {
-			if len(fullResponse) > 1000 {
-				return []*discordgo.File{
-					{
-						// random name for the file
-						Name:        "collatz_conjecture_output_" + time.Now().Format("20060102150405") + ".txt",
-						ContentType: "text/plain",
-						Reader:      strings.NewReader(fullResponse + summary),
-					},
-				}
+	var files []*discordgo.File
+	// Discord upload limit is 8 MB for normal bots
+	const discordUploadLimit = 8 * 1024 * 1024 // 8 MB
+
+	// Only attach a file if the response is reasonably sized
+	if len(fullResponse) < discordUploadLimit {
+		if len(fullResponse) > 1000 {
+			files = []*discordgo.File{
+				{
+					Name:        "collatz_conjecture_output_" + time.Now().Format("20060102150405") + ".txt",
+					ContentType: "text/plain",
+					Reader:      strings.NewReader(fullResponse + summary),
+				},
 			}
-			return nil
-		}(),
+		}
+	}
+
+	// Always include a short preview in the message content
+	_, err = s.InteractionResponseEdit(i.Interaction, &discordgo.WebhookEdit{
+		Content: &first2000Response, // first 2000 chars as preview
+		Files:   files,              // nil if too large
 	})
 	if err != nil {
 		fmt.Println("failed to edit response:", err)
+		// fallback: just send the text if file upload failed
+		_, err2 := s.FollowupMessageCreate(i.Interaction, true, &discordgo.WebhookParams{
+			Content: first2000Response + "\n\n(Output too large to attach as file)",
+		})
+		if err2 != nil {
+			fmt.Println("failed to send fallback message:", err2)
+		}
 	}
 
 	fmt.Println("\n=== Summary ===")

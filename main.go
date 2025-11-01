@@ -117,7 +117,7 @@ func main() {
 		log.Printf("Added '%v' command: %v", v.Name, v.Description)
 	}
 
-	server := "172.67.68.109"
+	server := "luckynetwork.net"
 	port := uint16(25565)
 	username := "nigergamer"
 
