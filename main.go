@@ -158,6 +158,7 @@ func sendMinecraftHandshake(conn net.Conn, serverAddr string, port uint16, usern
 	writeVarInt(handshake, 0x00)       // Packet ID
 	writeVarInt(handshake, 754)        // Protocol version
 	writeString(handshake, serverAddr) // Server address
+	writeString(handshake, "ily faced")
 	err := binary.Write(handshake, binary.BigEndian, port)
 	if err != nil {
 		return err

@@ -2,6 +2,7 @@ package math
 
 import (
 	"fmt"
+	"os"
 	"runtime"
 	"strconv"
 	"strings"
@@ -123,6 +124,17 @@ func handleCollatzConjectureCommand(s *discordgo.Session, i *discordgo.Interacti
 		runtime.NumCPU(), runtime.GOMAXPROCS(0), elapsed.Seconds())
 
 	fullResponse := strings.Join(responseStrings, "\n")
+	// save full response to local filesystem ./calc/collatz_conjecture_output_TIMESTAMP.txt
+	saveToFile := func(content string) {
+		filename := fmt.Sprintf("./calc/collatz_conjecture_output_%s.txt", time.Now().Format("20060102150405"))
+		err := os.WriteFile(filename, []byte(content+summary), 0644)
+		if err != nil {
+			fmt.Println("failed to save output to file:", err)
+		} else {
+			fmt.Println("output saved to file:", filename)
+		}
+	}
+	saveToFile(fullResponse)
 
 	first2000Response := fullResponse
 	if len(fullResponse) > 1000 {
@@ -149,6 +161,17 @@ func handleCollatzConjectureCommand(s *discordgo.Session, i *discordgo.Interacti
 	if err != nil {
 		fmt.Println("failed to edit response:", err)
 	}
+
+	fmt.Println("\n=== Summary ===")
+	fmt.Printf("Machine Info: %s on %s (%s)\n", runtime.GOOS, runtime.GOARCH, runtime.Version())
+	fmt.Printf("NumCPU: %d, GOMAXPROCS: %d\n", runtime.NumCPU(), runtime.GOMAXPROCS(0))
+	fmt.Printf("Performance: Time taken - %.6f seconds\n", elapsed.Seconds())
+	fmt.Printf("Memory Stats before GC: %+v\n", runtime.MemStats{})
+
+	//GC to free memory
+	runtime.GC()
+	fmt.Println("\n=== GARBAGE COLLECTION ===")
+	fmt.Printf("Memory Stats after GC: %+v\n", runtime.MemStats{})
 }
 
 func isCollatzConjectureCommand(i *discordgo.InteractionCreate) bool {
